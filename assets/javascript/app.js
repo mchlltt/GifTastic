@@ -1,11 +1,10 @@
 $(document).ready(function() {
 
-    // Variables
-    // Initial buttons
+    // Initial set of topics
     var topics = [
         'Ana',
         'Bastion',
-        'DVa',
+        'D.Va',
         'Genji',
         'Hanzo',
         'Junkrat',
@@ -17,31 +16,31 @@ $(document).ready(function() {
         'Reaper',
         'Reinhardt',
         'Roadhog',
-        'Soldier 76',
+        'Soldier: 76',
         'Sombra',
         'Symmetra',
         'Torbjorn',
         'Tracer',
         'Widowmaker',
+        'Winston',
         'Zarya',
         'Zenyatta'
     ];
 
-    var baseQueryURL;
-    var method = 'GET';
-
-
     // Button creation functions.
     var buttonFunctions = {
-        // Variables
+        // Set the button-holder div to a property.
         buttonHolder: $('.button-holder'),
-        // Methods
+
+        // Takes an array of strings and creates a button for each item.
         listToButtons: function(list) {
+            // Remove all the buttons first to avoid duplicates.
             buttonFunctions.buttonHolder.empty();
-            for (var i = 0; i < list.length; i++) {
-                buttonFunctions.stringToButton(list[i]);
-            }
+            // Then pass each item to stringToButton.
+            list.map(buttonFunctions.stringToButton);
         },
+
+        // Takes a single string and creates a button for it.
         stringToButton: function(str) {
             var button = $('<button>');
             var p = $('<p>');
@@ -53,68 +52,87 @@ $(document).ready(function() {
         }
     };
 
-    var gifFunctions = {
-        createGIF: function(results) {
-            for (var i = 0; i < results.length; i++) {
-                var gifDiv = $('<div>');
-                var p = $('<p>');
-                p.text('Rating: ' + results[i].rating);
-                p.addClass('text-center');
-                var gifImage = $('<img>');
-                gifImage.addClass('gif');
-                gifImage.attr('data-state', 'still');
-                gifImage.attr('data-still', results[i].images.fixed_height_still.url);
-                gifImage.attr('data-active', results[i].images.fixed_height.url);
-                gifImage.attr('src', results[i].images.fixed_height_still.url);
-                gifDiv.addClass('gif-div');
-                gifDiv.append(p);
-                gifDiv.append(gifImage);
-                $('.gif-holder').prepend(gifDiv);
-            }
-        }
-    };
-
-
-    // Immediately on page-load
+    // Immediately on page-load, display the initial topic list.
     buttonFunctions.listToButtons(topics);
-
-    // On-click events
 
     // Click submit button to add new topic.
     $('#submit-button').on('click', function() {
         // Get text of topicAddition input.
         var text = $('#topicAddition').val();
-        // Add the text to the topics array.
-        topics.push(text);
-        // Create buttons over.
-        buttonFunctions.listToButtons(topics);
+        // Clear any input.
+        $('#topicAddition').val('');
+        // If there was input and that input was not already in topics,
+        if ((text !== '') && topics.indexOf(text) === -1) {
+            // Add the text to the topics array.
+            topics.push(text);
+            // Create buttons over.
+            buttonFunctions.listToButtons(topics);
+        }
         // Don't reload the page.
         return false;
     });
 
-    // Click topic button to get GIFs.
+    // Click topic button to make GIPHY API call.
     $(document).on('click', '.gif-button', function() {
-        var topic = $(this).data('topic');
+        // Remove any GIFs currently on the page.
         $('.gif-holder').empty();
-        var animal = $(this).data('topic');
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC&limit=10";
+        // Get the topic data attribtue from the button clicked.
+        var topic = $(this).data('topic');
+        // Strip non-alphanumeric characters and replace them with '+'
+        var term = topic.replace(/[^A-Za-z0-9]/g, '+');
+        // If it is one of the original search terms, add '+overwatch' to the end to get better results.
+        if (topics.indexOf(topic) < 22) {
+            term += '+overwatch';
+        }
+
+        // API call parameters 
+        var method = 'GET';
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + term + "&api_key=dc6zaTOxFJmzC&limit=10";
 
         $.ajax({
                 url: queryURL,
                 method: 'GET'
-            })
-            .done(function(response) {
+            }).done(function(response) {
+                // Assign the 'data' array from the response to a variable.
                 var results = response.data;
-                gifFunctions.createGIF(results);
+                // Pass that variable to createGIF.
+                createGIF(results);
             });
     });
+
+    // Create GIFs from API call results
+    var createGIF = function(results) {
+        // For each GIF result,
+        results.map(function(result) {        
+            // Create a div, an img, and a p tag.
+            // Include identifying classes and centering helper classes.
+            var gifDiv = $('<div class="gif-div">');
+            var gifImage = $('<img class="gif center-block">');
+            var p = $('<p class="text-center">');
+            // Add image src, alternate src, and state attributes.
+            gifImage.attr('src', result.images.fixed_height_still.url);
+            gifImage.attr('data-state', 'still');
+            gifImage.attr('data-still', result.images.fixed_height_still.url);
+            gifImage.attr('data-active', result.images.fixed_height.url);
+            // Add rating text.
+            p.text('Rating: ' + result.rating);
+            // Add GIF and rating text to gifDiv
+            gifDiv.append(p);
+            gifDiv.prepend(gifImage);
+            // Add gifDiv to the GIF holder.
+            $('.gif-holder').prepend(gifDiv);
+        });
+    };
+
 
     // Click GIF to toggle animation.
     $(document).on('click', '.gif', function() {
         var state = $(this).attr('data-state');
+        // If the GIF is currently still, animate it.
         if (state == 'still') {
             $(this).attr('src', $(this).data('active'));
             $(this).attr('data-state', 'active');
+        // Otherwise, make it still.
         } else {
             $(this).attr('src', $(this).data('still'));
             $(this).attr('data-state', 'still');
