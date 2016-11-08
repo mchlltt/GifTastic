@@ -43,11 +43,11 @@ $(document).ready(function() {
         // Takes a single string and creates a button for it.
         stringToButton: function(str) {
             var button = $('<button>');
-            var p = $('<p>');
-            p.text(str);
+            var span = $('<span>');
+            span.text(str);
             button.addClass('btn btn-info gif-button');
             button.attr('data-topic', str);
-            button.append(p);
+            button.append(span);
             buttonFunctions.buttonHolder.append(button);
         }
     };
@@ -77,7 +77,7 @@ $(document).ready(function() {
         // Remove any GIFs currently on the page.
         $('.gif-holder').empty();
         // Get the topic data attribtue from the button clicked.
-        var topic = $(this).data('topic');
+        var topic = $(this).data('topic').trim();
         // Strip non-alphanumeric characters and replace them with '+'
         var term = topic.replace(/[^A-Za-z0-9]/g, '+');
         // If it is one of the original search terms, add '+overwatch' to the end to get better results.
@@ -96,13 +96,14 @@ $(document).ready(function() {
             // Assign the 'data' array from the response to a variable.
             var results = response.data;
             // Pass that variable to createGIF.
-            createGIF(results);
+            createGIF(results,topic);
         });
     });
 
     // Create GIFs from API call results
-    var createGIF = function(results) {
+    var createGIF = function(results, topic) {
         // For each GIF result,
+        console.log(results);
         results.map(function(result) {
             // Create a div, an img, and a p tag.
             // Include identifying classes and centering helper classes.
@@ -111,6 +112,7 @@ $(document).ready(function() {
             var p = $('<p class="text-center">');
             // Add image src, alternate src, and state attributes.
             gifImage.attr('src', result.images.fixed_height_still.url);
+            gifImage.attr('alt', 'A GIF related to ' + topic);
             gifImage.attr('data-state', 'still');
             gifImage.attr('data-still', result.images.fixed_height_still.url);
             gifImage.attr('data-active', result.images.fixed_height.url);

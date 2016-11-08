@@ -7,7 +7,7 @@ body {
     padding: 2vh 2vw;
 }
 
-p {
+p, span {
     font-size: 24px;
     letter-spacing: .5px;
     margin: 0;
