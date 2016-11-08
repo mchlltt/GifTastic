@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>GIPHY Search</title>
-    <!-- For media queries. -->
+    <!-- For media queries in Bootstrap. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Link to the jQuery Library -->
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
     <!-- Bootswatch CDN link -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha384-S7YMK1xjUjSpEnF4P8hPUcgjXYLZKK3fQW1j5ObLSl787II9p8RO9XUGehRmKsxd" crossorigin="anonymous">    
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha384-S7YMK1xjUjSpEnF4P8hPUcgjXYLZKK3fQW1j5ObLSl787II9p8RO9XUGehRmKsxd" crossorigin="anonymous">
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Boogaloo" rel="stylesheet">
     <!-- Personal stylesheet -->
@@ -21,19 +21,27 @@
 </head>
 
 <body class="center-block">
+    <!-- Button holder div -->
     <header class="row center-block">
         <div class="col-xs-12 button-holder center-block"></div>
     </header>
+    <!-- Main content -->
     <main class="row center-block">
-        <aside class="col-lg-3 col-xs-12 form-sidebar pull-right">
+        <!-- Form for adding new buttons -->
+        <section class="col-lg-3 col-xs-12 form-sidebar pull-right">
             <form>
                 <div class="form-group">
-                    <p><label for="topicAddition">Add a topic</label></p>
+                    <p>
+                        <label for="topicAddition">Add a topic</label>
+                    </p>
                     <input class="form-control" id="topicAddition" placeholder="Sanic" type="text">
-                    <button type="submit" class="btn btn-success" id="submit-button"><p>Submit</p></button>
+                    <button type="submit" class="btn btn-success" id="submit-button">
+                        <p>Submit</p>
+                    </button>
                 </div>
             </form>
-        </aside>
+        </section>
+        <!-- GIF holder div -->
         <section class="col-lg-9 col-xs-12 gif-holder clearfix pull-left"></section>
     </main>
 </body>

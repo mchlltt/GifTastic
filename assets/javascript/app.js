@@ -58,7 +58,7 @@ $(document).ready(function() {
     // Click submit button to add new topic.
     $('#submit-button').on('click', function() {
         // Get text of topicAddition input.
-        var text = $('#topicAddition').val();
+        var text = $('#topicAddition').val().trim();
         // Clear any input.
         $('#topicAddition').val('');
         // If there was input and that input was not already in topics,
@@ -81,29 +81,29 @@ $(document).ready(function() {
         // Strip non-alphanumeric characters and replace them with '+'
         var term = topic.replace(/[^A-Za-z0-9]/g, '+');
         // If it is one of the original search terms, add '+overwatch' to the end to get better results.
-        if (topics.indexOf(topic) < 22) {
+        if (topics.indexOf(topic) < 23) {
             term += '+overwatch';
         }
 
         // API call parameters 
         var method = 'GET';
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + term + "&api_key=dc6zaTOxFJmzC&limit=10";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + term + "&api_key=dc6zaTOxFJmzC&limit=10";
 
         $.ajax({
-                url: queryURL,
-                method: 'GET'
-            }).done(function(response) {
-                // Assign the 'data' array from the response to a variable.
-                var results = response.data;
-                // Pass that variable to createGIF.
-                createGIF(results);
-            });
+            url: queryURL,
+            method: 'GET'
+        }).done(function(response) {
+            // Assign the 'data' array from the response to a variable.
+            var results = response.data;
+            // Pass that variable to createGIF.
+            createGIF(results);
+        });
     });
 
     // Create GIFs from API call results
     var createGIF = function(results) {
         // For each GIF result,
-        results.map(function(result) {        
+        results.map(function(result) {
             // Create a div, an img, and a p tag.
             // Include identifying classes and centering helper classes.
             var gifDiv = $('<div class="gif-div">');
@@ -132,7 +132,7 @@ $(document).ready(function() {
         if (state == 'still') {
             $(this).attr('src', $(this).data('active'));
             $(this).attr('data-state', 'active');
-        // Otherwise, make it still.
+            // Otherwise, make it still.
         } else {
             $(this).attr('src', $(this).data('still'));
             $(this).attr('data-state', 'still');
