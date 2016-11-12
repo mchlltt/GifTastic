@@ -23,7 +23,13 @@
 <body class="center-block">
     <!-- Button holder div -->
     <header class="row center-block">
-        <div class="col-xs-12 button-holder center-block"></div>
+        <div class="col-xs-12 button-holder center-block">
+            <div class="dynamic-button-holder"></div>
+            <div class="static-button-holder">
+                <button type="submit" class="btn btn-danger" id="trending-button"><span>Trending GIFs</span></button>
+                <button type="submit" class="btn btn-danger" id="random-button"><span>Random Pokemon GIFs</span></button>
+            </div>
+        </div>
     </header>
     <!-- Main content -->
     <main class="row center-block">
@@ -31,7 +37,9 @@
         <div class="col-lg-3 col-xs-12 form-sidebar pull-right">
             <form>
                 <div class="form-group">
-                    <label for="topicAddition"><p>New topic</p></label>
+                    <p>
+                        <label for="topicAddition">New topic</label>
+                    </p>
                     <input class="form-control" id="topicAddition" placeholder="Sanic" type="text">
                     <button type="submit" class="btn btn-success" id="submit-button">
                         <span>Submit</span>

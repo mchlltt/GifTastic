@@ -24,8 +24,9 @@ header {
     min-height: 50px;
 }
 
+.btn-danger,
 .btn-info {
-    margin: 5px 5px;
+    margin: 5px;
     min-width: 120px;
 }
 
@@ -37,7 +38,6 @@ header {
     justify-content: space-around;
     max-width: 94vw;
 }
-
 
 /* GIF CSS */
 
